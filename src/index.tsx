@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import './style/App.css'
 import { BrowserRouter as Router} from "react-router-dom";
+import './style/App.css'
+import 'antd/dist/antd.css'
 
 ReactDOM.render(
     <Router>

@@ -1,7 +1,7 @@
 import React from 'react';
 import millify from 'millify'
 import { Typography, Row, Col, Statistic } from "antd";
-import { Link } from 'react-router-dom'
+//import { Link } from 'react-router-dom'
 import { useGetCryptosQuery } from '../services'
 import { LoadingOutlined } from "@ant-design/icons";
 

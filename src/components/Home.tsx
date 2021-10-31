@@ -1,18 +1,15 @@
 import React from 'react';
 import millify from 'millify'
 import { Typography, Row, Col, Statistic } from "antd";
-//import { Link } from 'react-router-dom'
-import { useGetCryptosQuery } from '../services'
-import { LoadingOutlined } from "@ant-design/icons";
+import { Link } from 'react-router-dom'
+import { Cryptocurrencies, News } from "./index";
+import { Coin, GlobalStats } from "../types";
+import { List } from 'immutable'
 
 const { Title } = Typography
 
-const Home = () => {
-    const { data, isFetching } = useGetCryptosQuery()
-    const globalStats = data?.data?.stats
-
-    if(isFetching) return <LoadingOutlined />
-
+const Home = (props: { globalStats: GlobalStats; coins: List<Coin>; }) => {
+    const { globalStats, coins } = props
     return (
         <>
             {
@@ -25,10 +22,20 @@ const Home = () => {
                         <Col span={12}><Statistic title="Total 24h Volume" value={millify(globalStats.total24hVolume)}/></Col>
                         <Col span={12}><Statistic title="Total Markets" value={millify(globalStats.totalMarkets)}/></Col>
                     </Row>
+                    <div className="home-heading-container">
+                        <Title level={2} className="home-title">Top 10 Crypto</Title>
+                        <Title level={3} className="show-more"><Link to="/cryptocurrencies">Show more</Link></Title>
+                    </div>
+                    <Cryptocurrencies coins={coins} />
+                    <div className="home-heading-container">
+                        <Title level={2} className="home-title">Crypto News</Title>
+                        <Title level={3} className="show-more"><Link to="/news">Show more</Link></Title>
+                    </div>
+               {/*     <News simplified />*/}
                 </>
             }
         </>
-    );
-};
+    )
+}
 
-export default Home;
+export default Home

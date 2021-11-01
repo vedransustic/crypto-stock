@@ -4,10 +4,11 @@ import { Typography, Row, Col, Statistic } from "antd";
 import { Link } from 'react-router-dom'
 import { Cryptocurrencies, News } from "./index";
 import { Coin, GlobalStats } from "../types/Application";
+import {Article} from "../types/News";
 
 const { Title } = Typography
 
-const Home = (props: { globalStats: GlobalStats; coins: Array<Coin>; }) => {
+const Home = (props: { globalStats: GlobalStats; coins: Array<Coin>; news: Array<Article> }) => {
     const { globalStats, coins } = props
     return (
         <>

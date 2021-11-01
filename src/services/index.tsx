@@ -1,3 +1,4 @@
-import { useGetCryptosQuery } from "./cryptoApi"
+import { useGetCryptosQuery, cryptoApi } from "./cryptoApi"
+import { useGetCryptoNewsQuery, cryptoNewsApi } from "./newsApi"
 
-export { useGetCryptosQuery }
+export { useGetCryptosQuery, cryptoApi, useGetCryptoNewsQuery, cryptoNewsApi }

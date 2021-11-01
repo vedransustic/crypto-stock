@@ -2,15 +2,18 @@ import React from 'react';
 import {Link, Route, Switch} from 'react-router-dom'
 import {Layout, Space, Typography} from 'antd'
 import {Cryptocurrencies, CryptoDetails, Exchanges, Home, Navbar, News, StockDetails, Stocks} from "./components";
-import {useGetCryptosQuery} from "./services";
+import {useGetCryptosQuery, useGetCryptoNewsQuery} from "./services";
 import {Coin, GlobalStats} from "./types/Application";
 import {LoadingOutlined} from "@ant-design/icons";
 
 const App = () => {
 
-    const { data, isFetching } = useGetCryptosQuery()
-    const globalStats: GlobalStats = data?.data?.stats
-    const coins: Array<Coin> = data?.data?.coins
+    const cryptocurrencies = useGetCryptosQuery()
+    const globalStats: GlobalStats = cryptocurrencies.data?.data?.stats
+    const coins: Array<Coin> = cryptocurrencies.data?.data?.coins
+    const cryptoNews = useGetCryptoNewsQuery({newCategory: "Cryptocurrencies Stocks"})
+    const news = cryptoNews && cryptoNews.data && cryptoNews.data.value
+    console.log("NEWS: ",news)
 
     return (
         <div className="app">
@@ -18,14 +21,14 @@ const App = () => {
                 <Navbar/>
             </div>
             {
-                isFetching ?
+                cryptocurrencies.isFetching ?
                     <LoadingOutlined /> :
                     <div className="main">
                     <Layout>
                         <div className="routes">
                             <Switch>
                                 <Route exact path="/">
-                                    <Home globalStats={globalStats} coins={coins} />
+                                    <Home globalStats={globalStats} coins={coins} news={news} />
                                 </Route>
                                 <Route exact path="/cryptocurrencies">
                                     <Cryptocurrencies coins={coins} filtered={false}/>
@@ -43,7 +46,7 @@ const App = () => {
                                     <Exchanges/>
                                 </Route>
                                 <Route exact path="/news">
-                                    <News/>
+                                    <News news={news} filtered={false}/>
                                 </Route>
                             </Switch>
                         </div>

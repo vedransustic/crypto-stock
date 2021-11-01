@@ -1,5 +1,3 @@
-import { List } from "immutable";
-
 export type GlobalStats = {
     base: string,
     limit: number,
@@ -24,7 +22,7 @@ export type Coin = {
     confirmedSupply: boolean
     description: string
     firstSeen: number
-    history: List<string>
+    history: Array<string>
     iconType: string
     iconUrl: string
     id: number

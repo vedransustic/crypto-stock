@@ -3,12 +3,11 @@ import millify from 'millify'
 import { Typography, Row, Col, Statistic } from "antd";
 import { Link } from 'react-router-dom'
 import { Cryptocurrencies, News } from "./index";
-import { Coin, GlobalStats } from "../types";
-import { List } from 'immutable'
+import { Coin, GlobalStats } from "../types/Application";
 
 const { Title } = Typography
 
-const Home = (props: { globalStats: GlobalStats; coins: List<Coin>; }) => {
+const Home = (props: { globalStats: GlobalStats; coins: Array<Coin>; }) => {
     const { globalStats, coins } = props
     return (
         <>
@@ -23,10 +22,10 @@ const Home = (props: { globalStats: GlobalStats; coins: List<Coin>; }) => {
                         <Col span={12}><Statistic title="Total Markets" value={millify(globalStats.totalMarkets)}/></Col>
                     </Row>
                     <div className="home-heading-container">
-                        <Title level={2} className="home-title">Top 10 Crypto</Title>
+                        <Title level={2} className="home-title">Top Rising Crypto</Title>
                         <Title level={3} className="show-more"><Link to="/cryptocurrencies">Show more</Link></Title>
                     </div>
-                    <Cryptocurrencies coins={coins} />
+                    <Cryptocurrencies coins={coins} filtered={true}/>
                     <div className="home-heading-container">
                         <Title level={2} className="home-title">Crypto News</Title>
                         <Title level={3} className="show-more"><Link to="/news">Show more</Link></Title>

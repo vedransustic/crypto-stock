@@ -1,17 +1,16 @@
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom'
-import { Layout, Typography, Space } from 'antd'
-import { Navbar, Home, Cryptocurrencies, CryptoDetails, Stocks, StockDetails, Exchanges, News } from "./components";
+import {Link, Route, Switch} from 'react-router-dom'
+import {Layout, Space, Typography} from 'antd'
+import {Cryptocurrencies, CryptoDetails, Exchanges, Home, Navbar, News, StockDetails, Stocks} from "./components";
 import {useGetCryptosQuery} from "./services";
-import {Coin, GlobalStats} from "./types";
-import {List} from "immutable";
+import {Coin, GlobalStats} from "./types/Application";
 import {LoadingOutlined} from "@ant-design/icons";
 
 const App = () => {
 
     const { data, isFetching } = useGetCryptosQuery()
     const globalStats: GlobalStats = data?.data?.stats
-    const coins: List<Coin> = data?.data?.coins
+    const coins: Array<Coin> = data?.data?.coins
 
     return (
         <div className="app">
@@ -29,7 +28,7 @@ const App = () => {
                                     <Home globalStats={globalStats} coins={coins} />
                                 </Route>
                                 <Route exact path="/cryptocurrencies">
-                                    <Cryptocurrencies coins={coins}/>
+                                    <Cryptocurrencies coins={coins} filtered={false}/>
                                 </Route>
                                 <Route exact path="/cryptocurrencies/:coinId">
                                     <CryptoDetails/>

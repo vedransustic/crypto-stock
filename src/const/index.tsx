@@ -1,0 +1,1 @@
+export const displayNumberOfFilteredCoins:number = 8

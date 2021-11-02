@@ -5,13 +5,25 @@ import { Link } from 'react-router-dom'
 import { Cryptocurrencies, News } from "./index";
 import { Coin, GlobalStats } from "../types/Application";
 import {Article} from "../types/News";
+import {useGetCryptoNewsQuery, useGetCryptosQuery} from "../services";
+import {LoadingOutlined} from "@ant-design/icons";
 
 const { Title } = Typography
 
 const Home = (props: { globalStats: GlobalStats; coins: Array<Coin>; news: Array<Article> }) => {
-    const { globalStats, coins } = props
+
+    const cryptocurrencies = useGetCryptosQuery()
+    const globalStats: GlobalStats = cryptocurrencies.data?.data?.stats
+    const coins: Array<Coin> = cryptocurrencies.data?.data?.coins
+    const cryptoNews = useGetCryptoNewsQuery({newCategory: "Cryptocurrencies Stocks"})
+    const news = cryptoNews && cryptoNews.data && cryptoNews.data.value
+
+    cryptocurrencies.isFetching ?
+        <LoadingOutlined /> :
+
     return (
         <>
+            {
             {
                 globalStats && <>
                     <Title level={2} className="heading">Global Crypto Stats</Title>

@@ -1,44 +1,37 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Select, Typography, Row, Col, Avatar, Card } from "antd";
 import { Article } from "../types/News";
-import Crypto from "../img/cryptocurrency.png"
+import Default from "../img/default_news.png"
 import moment from "moment";
+import createHistory from 'history/createBrowserHistory'
 
 
 const News = (props:{news:Array<Article>, filtered: boolean}) => {
 
     const { news, filtered } = props
     const { Text, Title } = Typography
-    const [newCategory, setNewsCategory] = useState('Cryprtocurrency')
+    const [state, setState] = useState<Array<Article>>([])
 
-    console.log(news)
+    useEffect(() => {
+        return setState(news);
+    })
+
     return (
         <Row gutter={[24,24]}>
             {
                 !filtered &&
                     <Col span={24}>
-                        <Select
-                            showSearch
-                            className="select-news"
-                            placeholder="Select a Crypto"
-                            optionFilterProp="children"
-                            onChange={(val) => console.log(val)}
-                            filterOption={(input, option) => option?.childre.toLowerCase().indexOf(input.toLowerCase())}
-                        >
-                            <Select.Option value="Cryptocurrency Stock">default</Select.Option>
-                            <Select.Option value="Cryptocurrency">Cryptocurrency</Select.Option>
-                            <Select.Option value="Stock">Stock</Select.Option>
-                        </Select>
+
                     </Col>
             }
             {
-                news.map((item, idx) => (
+                state.map((item, idx) => (
                     <Col xs={24} sm={12} lg={6} className="news-card" key={ idx }>
                         <Card className="news-card" hoverable>
                             <a href={ item.url } target="_blank" rel="noreferrer">
                                 <div className="news-image-container">
                                     <Title className="news-title" level={4}>{ item.name }</Title>
-                                    <img src={ item?.image?.thumbnail?.contentUrl || Crypto } style={{maxWidth: '200px', maxHeight: '100px'}} alt="thumbnail"/>
+                                    <img src={ item?.image?.thumbnail?.contentUrl || Default } style={{maxWidth: '200px', maxHeight: '100px'}} alt="thumbnail"/>
                                 </div>
                                 <p>
                                     {

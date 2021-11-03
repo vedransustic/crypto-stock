@@ -1,42 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import millify from 'millify';
 import { Link } from 'react-router-dom'
 import { Card, Col, Input, Row} from 'antd'
 import { Coin } from "../types/Application";
-import {displayNumberOfFilteredCoins} from "../const";
-import {ICoinsState} from "../types/Cryptocurrencies";
+import { DISPLAY_NUMBER_OF_FILTERED_COINS, DISPLAY_NUMBER_OF_COINS } from "../const";
+import { ICoinsState } from "../types/Cryptocurrencies";
+import { useGetCryptosQuery } from "../services";
+import { LoadingOutlined } from "@ant-design/icons";
 
-const Cryptocurrencies = (props: { coins: Array<Coin>, filtered: boolean }) => {
+const Cryptocurrencies = (props: { simplefied: boolean; }) => {
 
-    const compareNumbers = (a: { change: number}, b: { change: number; }) => {
-        if(a.change>b.change){
-            return -1
-        }
-        if(a.change<b.change){
-            return 1
-        }
-        return 0
-    }
-    const getFilteredRisingCoins = (coins: any) => {
-        const coinsForSort = [...coins]
-        return coinsForSort.sort(compareNumbers).splice(0,displayNumberOfFilteredCoins)
-    }
-
-    const coinsToDisplay = props.filtered ? getFilteredRisingCoins(props.coins) : props.coins
+    const count = props.simplefied ? DISPLAY_NUMBER_OF_FILTERED_COINS : DISPLAY_NUMBER_OF_COINS
+    const {data: cryptocurrencies, isFetching} = useGetCryptosQuery(count)
+    const coins: Array<Coin> = cryptocurrencies && cryptocurrencies.data && cryptocurrencies.data.coins
 
     const [data, setData] = useState<ICoinsState>({
         searchTerm: '',
         displayCoins: []
     })
 
-    useEffect(() => {
-       return setData({...data, displayCoins: coinsToDisplay.filter((coin) => coin.name.toLowerCase().includes(data.searchTerm.toLowerCase())) });
-    }, [data.searchTerm])
+   useEffect(() => {
+       if(!isFetching){
+           const filteredData = {...data, displayCoins: coins.filter((coin: { name: string; }) => coin.name.toLowerCase().includes(data.searchTerm.toLowerCase())) }
+           setData(filteredData)
+       }
+    }, [data.searchTerm, coins])
+
+    if( isFetching ) return <LoadingOutlined />
 
     return (
         <>
             {
-                !props.filtered &&
+                count > 10 &&
                 <Row className="search-crypto" gutter={1}>
                     <Input placeholder="Search cryptocurrency" onChange={(e) => setData({...data, searchTerm: e.target.value})}/>
                 </Row>
@@ -46,7 +41,7 @@ const Cryptocurrencies = (props: { coins: Array<Coin>, filtered: boolean }) => {
                 {
                     data.displayCoins.map((coin: Coin) => (
                         <Col xs={24} sm={12} lg={6} className="crypto-card" key={coin.id}>
-                            <Link to={`/crypto/${coin.slug}`}>
+                            <Link key={coin.id} to={`/cryptocurrencies/${coin.id}`}>
                                 <Card
                                     title={`${coin.rank}. ${coin.name}`}
                                     extra={ <img className="crypto-image" src={coin.iconUrl} alt={coin.name}/> }
@@ -62,7 +57,7 @@ const Cryptocurrencies = (props: { coins: Array<Coin>, filtered: boolean }) => {
                 }
             </Row>
         </>
-    );
-};
+    )
+}
 
-export default Cryptocurrencies;
+export default Cryptocurrencies

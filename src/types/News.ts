@@ -31,3 +31,8 @@ type Provider = {
         }
     }
 }
+
+export type INewsState = {
+    searchTerm: string,
+    displayNews: Array<Article>
+}
